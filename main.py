@@ -9,7 +9,7 @@ H = 400
 etat = [6] # 4 = gauche, 6 = droite, 8 = haut, 2 = bas
 taille = [4]
 
-serpent = [
+serpent_base = [
     [200, 200, 205, 205],
     [205, 200, 210, 205],
     [210, 200, 215, 205],
@@ -23,29 +23,35 @@ colour = [
 
 # Fonctions
 
-def haut():
+def haut(event):
     print('Haut')
     if etat[0] == 4 or etat[0] == 6:
         etat[0] = 8
 
-def bas():
+def bas(event):
     print('Bas')
     if etat[0] == 4 or etat[0] == 6:
         etat[0] = 2
 
-def droite():
+def droite(event):
+    print('Droite')
     if etat[0] == 8 or etat[0] == 2:
         etat[0] =  6
 
-def gauche():
+def gauche(event):
+    print('Gauche')
     if etat[0] == 8 or etat[0] == 2:
         etat[0] = 4
 
 def off_limit(x, y):
     if x >= 400 or y >= 400:
-        win.quit()
+        game.delete(ALL)
+        game.create_text(W/2-25, H/2-25, text='Game \n over')
 
 def new_game():
+    game.delete(ALL)
+    global serpent
+    serpent = list(serpent_base)
     deplacement()
 
 def deplacement():
@@ -69,8 +75,8 @@ def deplacement():
         game.create_rectangle(serpent[i])
     for i in range(0, taille[0]):
         game.create_rectangle(origine[i], outline=colour[1])
-    #off_limit(serpent[0][0], serpent[0][1])
-    game.after(150, deplacement)
+    off_limit(serpent[0][0], serpent[0][1])
+    game.after(200, deplacement)
 
 # Widgets
 
@@ -80,10 +86,10 @@ win.title('Snake')
 game = Canvas(win, width=W, height=H, bg=colour[1])
 game.grid(rowspan=14, column=1)
 
-game.bind('<Up>', haut)
-game.bind('<Down>', bas)
-game.bind('<Left>', gauche)
-game.bind('<Right>', droite)
+win.bind('<KeyPress-Up>', haut)
+win.bind('<KeyPress-Down>', bas)
+win.bind('<KeyPress-Left>', gauche)
+win.bind('<KeyPress-Right>', droite)
 
 but1 = Button(win, text='Start new game', fg=colour[0], bg=colour[1], command=new_game)
 but1.grid(row=1, column=0)
