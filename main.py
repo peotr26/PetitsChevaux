@@ -36,7 +36,7 @@ couleur = [
     '#000000',  # Noir
     '#FFFFFF',  # Blanc
     '#6CBB3C',  # Vert
-    '#FF0000',  #Rouge
+    '#FF0000',  # Rouge
 ]
 
 # Fonctions
@@ -75,8 +75,18 @@ def ecran_game_over():
 def hors_limite(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent sort de la carte.'''
     if x >= W+taille_bloc or y >= H+taille_bloc or x <= 0-taille_bloc or y <= 0-taille_bloc:
-        ecran_game_over()  
-
+        ecran_game_over()
+    
+def hors_limite_infinie(x:int, y:int):
+    if x >= W+taille_bloc:
+        serpent[0] -= W ; serpent[3] -= W
+    elif y >= H+taille_bloc:
+        serpent[]
+    elif x <= 0-taille_bloc:
+        serpent[]
+    elif y <= 0-taille_bloc:
+        serpent[]
+        
 def suicide(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent se mord la queue.'''
     print(x, y)
@@ -105,9 +115,10 @@ def deplacement():
     for i in range(0,taille_serpent):   # Efface l'ancien dernier bloc du serpent.
         game.create_rectangle(serpent[i], width=taille_bloc , outline=couleur[2], fill=couleur[2])
     game.create_rectangle(origine[taille_serpent-1], width=taille_bloc, outline=couleur[1], fill=couleur[1])
-    hors_limite(serpent[0][0], serpent[0][1])
-    if taille_serpent < 4:              # Afin d'éviter que la partie s'arrête sans que le serpent ne se soit mordu le corps.
-        suicide(serpent[0][0], serpent[0][1])
+    if infinie == False:
+        hors_limite(serpent[0][0], serpent[0][1])
+        if taille_serpent < 4:          # Afin d'éviter que la partie s'arrête sans que le serpent ne se soit mordu le corps.
+            suicide(serpent[0][0], serpent[0][1])
     if stop == False:                   # Arrête le serpent quand la partie est finie ou que le jeu est en pause.
         game.after(100, deplacement)
 
@@ -124,11 +135,18 @@ def pause(event):
         game.delete(ecran_pause)
         deplacement()
 
-def nouvelle_partie():
+def nouvelle_partie_mort():
     '''Fonction qui commence une nouvelle partie.'''
-    global stop, serpent, etat, game_over
+    global stop, serpent, etat, game_over, infinie
     game.delete(ALL)
-    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False
+    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = False
+    deplacement()
+
+def nouvelle_partie_infinie():
+    '''Fonction qui commence une nouvelle partie.'''
+    global stop, serpent, etat, game_over, infinie
+    game.delete(ALL)
+    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = True
     deplacement()
 
 # Widgets
@@ -148,10 +166,13 @@ win.bind('<Right>', droite)
 # Assignation de la touche 'p' pour mettre le jeu en pause.
 win.bind('<p>', pause)
 
-but1 = Button(win, text='Nouvelle \n partie', fg=couleur[0], bg=couleur[1], command=nouvelle_partie)
+but1 = Button(win, text='Nouvelle partie \n avec mort', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_mort)
 but1.grid(row=1, column=0)
 
-but2 = Button(win, text='Quitter', fg=couleur[0], bg=couleur[1], command=win.quit)
-but2.grid(row=13, column=0)
+but2 = Button(win, text='Nouvelle partie \n infinie', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_infinie)
+but2.grid(row=2, column=0)
+
+but3 = Button(win, text='Quitter', fg=couleur[0], bg=couleur[1], command=win.quit)
+but3.grid(row=13, column=0)
 
 win.mainloop()
