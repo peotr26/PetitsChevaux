@@ -6,6 +6,7 @@ from tkinter import *
 
 # Variables
 
+# Tailles du canvas du jeu.
 W = 600
 H = 600
 
