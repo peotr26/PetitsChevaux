@@ -12,12 +12,14 @@ H = 600
 global taille_serpent
 global etat
 global taille_bloc
+global stop
 global game_over
 
 etat = 6                # Variable de la direction du serpent
 # 4 = gauche, 6 = droite, 8 = haut, 2 = bas
 taille_serpent = 4      # Variable de la taille du serpent.
 taille_bloc= int(H/20)  # Variable de la taille d'un carré faisant partie du serpent en fonction de la résolution.
+stop = False            # Variable de si le jeu est arrêté.
 game_over = False       # Variable de si la partie est finie ou non.
 
 # Liste des coordonnées des blocs du serpent au début d'une partie 
@@ -29,10 +31,11 @@ serpent_base = [
 ]
 
 # Liste des couleurs utilisés dans le programme:
-colour = [
+couleur = [
     '#000000',  # Noir
     '#FFFFFF',  # Blanc
     '#6CBB3C',  # Vert
+    '#FF0000',  #Rouge
 ]
 
 # Fonctions
@@ -63,10 +66,10 @@ def gauche(event):
 
 def ecran_game_over():
     '''Fonction qui dessine l'écran de fin de partie.'''
-    global game_over
+    global stop, game_over
     game.delete(ALL)
-    game.create_text(W/2-25, H/2-25, text='Game \n over')
-    game_over = True                # Marque la partie comme terminé
+    game.create_text(W/2, H/2, text='Game \n over', font=('Impact', 30), fill=couleur[3])
+    stop = True ; game_over = True      # Arrête le serpent et marque la partie comme finie.
 
 def hors_limite(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent sort de la carte.'''
@@ -99,19 +102,31 @@ def deplacement():
     for i in range(1,taille_serpent):
         serpent[i] = origine[i-1]
     for i in range(0,taille_serpent):   # Efface l'ancien dernier bloc du serpent.
-        game.create_rectangle(serpent[i], width=taille_bloc , outline=colour[2], fill=colour[2])
-    game.create_rectangle(origine[taille_serpent-1], width=taille_bloc, outline=colour[1], fill=colour[1])
+        game.create_rectangle(serpent[i], width=taille_bloc , outline=couleur[2], fill=couleur[2])
+    game.create_rectangle(origine[taille_serpent-1], width=taille_bloc, outline=couleur[1], fill=couleur[1])
     hors_limite(serpent[0][0], serpent[0][1])
     if taille_serpent < 4:              # Afin d'éviter que la partie s'arrête sans que le serpent ne se soit mordu le corps.
         suicide(serpent[0][0], serpent[0][1])
-    if game_over == False:              # Arrête le serpent quand la partie est finie.
+    if stop == False:                   # Arrête le serpent quand la partie est finie ou que le jeu est en pause.
         game.after(100, deplacement)
+
+def pause(event):
+    global stop, ecran_pause
+    if game_over == True:
+        return
+    elif stop == False:     # Si le jeu n'est pas déja en arrêter.
+        stop = True
+        ecran_pause = game.create_text(W/2, H/2, text='Pause', font=('Impact', 30))
+    elif stop == True:      #  Relance le jeu si il est arrêter.
+        stop = False
+        game.delete(ecran_pause)
+        deplacement()
 
 def nouvelle_partie():
     '''Fonction qui commence une nouvelle partie.'''
-    global game_over, serpent, etat
+    global stop, serpent, etat, game_over
     game.delete(ALL)
-    serpent = list(serpent_base) ; game_over = False ; etat = 6
+    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False
     deplacement()
 
 # Widgets
@@ -119,19 +134,22 @@ def nouvelle_partie():
 win = Tk()
 win.title('Snake')
 
-game = Canvas(win, width=W, height=H, bg=colour[1])
+game = Canvas(win, width=W, height=H, bg=couleur[1])
 game.grid(rowspan=14, column=1)
 
 # Assignation des touches directionnelles pour choisir la direction du serpent
-win.bind('<KeyPress-Up>', haut)
-win.bind('<KeyPress-Down>', bas)
-win.bind('<KeyPress-Left>', gauche)
-win.bind('<KeyPress-Right>', droite)
+win.bind('<Up>', haut)
+win.bind('<Down>', bas)
+win.bind('<Left>', gauche)
+win.bind('<Right>', droite)
 
-but1 = Button(win, text='Nouvelle \n partie', fg=colour[0], bg=colour[1], command=nouvelle_partie)
+# Assignation de la touche 'p' pour mettre le jeu en pause.
+win.bind('<p>', pause)
+
+but1 = Button(win, text='Nouvelle \n partie', fg=couleur[0], bg=couleur[1], command=nouvelle_partie)
 but1.grid(row=1, column=0)
 
-but2 = Button(win, text='Quitter', fg=colour[0], bg=colour[1], command=win.quit)
+but2 = Button(win, text='Quitter', fg=couleur[0], bg=couleur[1], command=win.quit)
 but2.grid(row=13, column=0)
 
 win.mainloop()
