@@ -111,6 +111,7 @@ def deplacement():
         game.after(100, deplacement)
 
 def pause(event):
+    '''Fonction qui met en pause la partie.'''
     global stop, ecran_pause
     if game_over == True:
         return
