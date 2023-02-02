@@ -41,6 +41,8 @@ couleur = [
 
 # Fonctions
 
+# Fonctions pour faire changer la direction du serpent avec le clavier.
+
 def haut(event):
     '''Fonction qui change la direction du serpent vers le haut.'''
     global etat
@@ -65,17 +67,22 @@ def gauche(event):
     if etat == 8 or etat == 2:      # Idem
         etat = 4
 
-def ecran_game_over():
-    '''Fonction qui dessine l'écran de fin de partie.'''
+# Fonctions pour la fin de partie et la gestion des bords de la cartes.
+
+def activer_game_over():
+    '''Fonction qui active la fin de partie.'''
     global stop, game_over
+    stop = True ; game_over = True      # Arrête le serpent et marque la partie comme finie.
+    
+def ecran_game_over():
+    '''Fonction qui dessine l'écran de fin de partie'''
     game.delete(ALL)
     game.create_text(W/2, H/2, text='Game \n over', font=('Impact', 30), fill=couleur[3])
-    stop = True ; game_over = True      # Arrête le serpent et marque la partie comme finie.
 
 def hors_limite(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent sort de la carte dans une partie classique.'''
     if x >= W+taille_bloc or y >= H+taille_bloc or x <= 0-taille_bloc or y <= 0-taille_bloc:
-        ecran_game_over()
+        activer_game_over()
     
 def hors_limite_infinie(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent sort de la carte dans une partie infinie.'''
@@ -93,7 +100,9 @@ def suicide(x:int, y:int):
     print(x, y)
     for i in range(4, taille_serpent):
         if serpent[i][0] == x  or serpent[i][1] == y :
-            ecran_game_over()
+            activer_game_over()
+
+# Fonctions pour le mouvement du serpent.
 
 def tete():
     '''Fonction qui change la position de la tête en fonction de la direction.'''
@@ -128,6 +137,10 @@ def deplacement():
     bordure()
     if stop == False:                   # Arrête le serpent quand la partie est finie ou que le jeu est en pause.
         game.after(100, deplacement)
+    if game_over == True:
+        ecran_game_over()
+
+# Fonctions pour lancer une partie et la mettre en pause.
 
 def pause(event):
     '''Fonction qui met en pause la partie.'''
@@ -156,6 +169,24 @@ def nouvelle_partie_infinie():
     serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = True
     deplacement()
 
+# Fonctions pour permettre l'utilisation du jeu sans la souris.
+
+def fin_partie(event):
+    '''Fonction qui arrête la partie lorsqu'une touche est actionner.'''
+    activer_game_over()
+    
+def quitter(event):
+    '''Fonction pour quitter le jeu lorsqu'une touche est actionner.'''
+    win.quit()
+
+def lancer_classique(event):
+    '''Fonction qui lance une partie classique lorsqu'une touche est actionner.'''
+    nouvelle_partie_classique()
+    
+def lancer_infinie(event):
+    '''Fonction qui lance une partie infinie lorsqu'une touche est actionner'''
+    nouvelle_partie_infinie()
+
 # Widgets
 
 win = Tk()
@@ -173,13 +204,28 @@ win.bind('<Right>', droite)
 # Assignation de la touche 'p' pour mettre le jeu en pause.
 win.bind('<p>', pause)
 
-but1 = Button(win, text='Nouvelle partie \n classique', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_classique)
+# Assignation de la touche 'f' pour arrêter la partie.
+win.bind('<f>', fin_partie)
+
+# Assignation de la touche 'q' pour quitter le jeu.
+win.bind('<q>', quitter)
+
+# Assignation de la touche 'c' pour lancer une partie classique.
+win.bind('<c>', lancer_classique)
+
+# Assignation de la touche'i' pour lancer une partie infinie.
+win.bind('<i>', lancer_infinie)
+
+but1 = Button(win, text='Nouvelle partie \n classique [c]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_classique)
 but1.grid(row=1, column=0)
 
-but2 = Button(win, text='Nouvelle partie \n infinie', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_infinie)
+but2 = Button(win, text='Nouvelle partie \n infinie [i]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_infinie)
 but2.grid(row=2, column=0)
 
-but3 = Button(win, text='Quitter', fg=couleur[0], bg=couleur[1], command=win.quit)
-but3.grid(row=13, column=0)
+but3 = Button(win, text='Fin de partie [f]', fg=couleur[0], bg=couleur[1], command=activer_game_over)
+but3.grid(row=3, column=0)
+
+but4 = Button(win, text='Quitter [q]', fg=couleur[0], bg=couleur[1], command=win.quit)
+but4.grid(row=13, column=0)
 
 win.mainloop()
