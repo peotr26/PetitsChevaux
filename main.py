@@ -24,20 +24,20 @@ stop = False            # Variable de si le jeu est arrêté.
 game_over = False       # Variable de si la partie est finie ou non.
 
 # Liste des coordonnées des blocs du serpent au début d'une partie 
-serpent_base = [
-    [W/2+(taille_bloc*0), W/2, H/2+(taille_bloc*0), H/2],
-    [W/2+(taille_bloc*1), W/2, H/2+(taille_bloc*1), H/2],
-    [W/2+(taille_bloc*2), W/2, H/2+(taille_bloc*2), H/2],
-    [W/2+(taille_bloc*3), W/2, H/2+(taille_bloc*3), H/2]
-]
+serpent_base = (
+    (W/2+(taille_bloc*0), W/2, H/2+(taille_bloc*0), H/2),
+    (W/2+(taille_bloc*1), W/2, H/2+(taille_bloc*1), H/2),
+    (W/2+(taille_bloc*2), W/2, H/2+(taille_bloc*2), H/2),
+    (W/2+(taille_bloc*3), W/2, H/2+(taille_bloc*3), H/2)
+)
 
 # Liste des couleurs utilisés dans le programme:
-couleur = [
+couleur = (
     '#000000',  # Noir
     '#FFFFFF',  # Blanc
     '#6CBB3C',  # Vert
     '#FF0000',  # Rouge
-]
+)
 
 # Fonctions
 
@@ -81,18 +81,18 @@ def ecran_game_over():
 
 def hors_limite(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent sort de la carte dans une partie classique.'''
-    if x >= W+taille_bloc or y >= H+taille_bloc or x <= 0-taille_bloc or y <= 0-taille_bloc:
+    if x >= W+int(taille_bloc/2) or y >= H+int(taille_bloc/2) or x <= 0-int(taille_bloc/2) or y <= 0-int(taille_bloc/2):
         activer_game_over()
     
 def hors_limite_infinie(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent sort de la carte dans une partie infinie.'''
-    if x >= W+taille_bloc:
+    if x >= W+int(taille_bloc/2):
         serpent[0][0] = serpent[0][0] - (W+taille_bloc) ; serpent[0][2] = serpent[0][2] - (W+taille_bloc)
-    elif y >= H+taille_bloc:
+    elif y >= H+int(taille_bloc/2):
         serpent[0][1] = serpent[0][1] - (W+taille_bloc) ; serpent[0][3] = serpent[0][3] - (W+taille_bloc)
-    elif x <= 0-taille_bloc:
+    elif x <= 0-int(taille_bloc/2):
         serpent[0][0] = serpent[0][0] + (W+taille_bloc) ; serpent[0][2] = serpent[0][2] + (W+taille_bloc)
-    elif y <= 0-taille_bloc:
+    elif y <= 0-int(taille_bloc/2):
         serpent[0][1] = serpent[0][1] + (W+taille_bloc) ; serpent[0][3] = serpent[0][3] + (W+taille_bloc)
         
 def suicide(x:int, y:int):
@@ -131,15 +131,22 @@ def deplacement():
     tete()
     for i in range(1,taille_serpent):
         serpent[i] = origine[i-1]
-    for i in range(0,taille_serpent):   # Efface l'ancien dernier bloc du serpent.
+    for i in range(0,taille_serpent):   
         game.create_rectangle(serpent[i], width=taille_bloc , outline=couleur[2], fill=couleur[2])
-    game.create_rectangle(origine[taille_serpent-1], width=taille_bloc, outline=couleur[1], fill=couleur[1])
+    effacement()
     bordure()
     if stop == False:                   # Arrête le serpent quand la partie est finie ou que le jeu est en pause.
         game.after(100, deplacement)
     if game_over == True:
         ecran_game_over()
 
+def effacement():
+    '''Fonction qui efface la queue du serpent.'''
+    global nombre_iteration
+    if nombre_iteration > 2:
+        game.create_rectangle(origine[taille_serpent-1], width=taille_bloc, outline=couleur[1], fill=couleur[1])    # Efface l'ancien dernier bloc du serpent.
+    nombre_iteration += 1
+    
 # Fonctions pour lancer une partie et la mettre en pause.
 
 def pause(event):
@@ -157,16 +164,16 @@ def pause(event):
 
 def nouvelle_partie_classique():
     '''Fonction qui commence une nouvelle partie.'''
-    global stop, serpent, etat, game_over, infinie
+    global stop, serpent, etat, game_over, infinie, nombre_iteration
     game.delete(ALL)
-    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = False
+    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0
     deplacement()
 
 def nouvelle_partie_infinie():
     '''Fonction qui commence une nouvelle partie.'''
-    global stop, serpent, etat, game_over, infinie
+    global stop, serpent, etat, game_over, infinie, nombre_iteration
     game.delete(ALL)
-    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = True
+    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = True ; nombre_iteration = 0
     deplacement()
 
 # Fonctions pour permettre l'utilisation du jeu sans la souris.
