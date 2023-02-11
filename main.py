@@ -24,11 +24,18 @@ stop = False            # Variable de si le jeu est arrêté.
 game_over = False       # Variable de si la partie est finie ou non.
 
 # Liste des coordonnées des blocs du serpent au début d'une partie 
+#serpent_base = (
+#    (W/2+(taille_bloc*0), W/2, H/2+(taille_bloc*0), H/2),
+#    (W/2+(taille_bloc*1), W/2, H/2+(taille_bloc*1), H/2),
+#    (W/2+(taille_bloc*2), W/2, H/2+(taille_bloc*2), H/2),
+#    (W/2+(taille_bloc*3), W/2, H/2+(taille_bloc*3), H/2)
+#)
+
 serpent_base = (
-    (W/2+(taille_bloc*0), W/2, H/2+(taille_bloc*0), H/2),
-    (W/2+(taille_bloc*1), W/2, H/2+(taille_bloc*1), H/2),
-    (W/2+(taille_bloc*2), W/2, H/2+(taille_bloc*2), H/2),
-    (W/2+(taille_bloc*3), W/2, H/2+(taille_bloc*3), H/2)
+    (W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2)),
+    (W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2)),
+    (W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2)),
+    (W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2))
 )
 
 # Liste des couleurs utilisés dans le programme:
@@ -81,18 +88,18 @@ def ecran_game_over():
 
 def hors_limite(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent sort de la carte dans une partie classique.'''
-    if x >= W+int(taille_bloc/2) or y >= H+int(taille_bloc/2) or x <= 0-int(taille_bloc/2) or y <= 0-int(taille_bloc/2):
+    if x >= W or y >= H or x <= 0 or y <= 0:
         activer_game_over()
     
 def hors_limite_infinie(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent sort de la carte dans une partie infinie.'''
-    if x >= W+int(taille_bloc/2):
+    if x >= W:
         serpent[0][0] = serpent[0][0] - (W+taille_bloc) ; serpent[0][2] = serpent[0][2] - (W+taille_bloc)
-    elif y >= H+int(taille_bloc/2):
+    elif y >= H:
         serpent[0][1] = serpent[0][1] - (W+taille_bloc) ; serpent[0][3] = serpent[0][3] - (W+taille_bloc)
-    elif x <= 0-int(taille_bloc/2):
+    elif x <= 0:
         serpent[0][0] = serpent[0][0] + (W+taille_bloc) ; serpent[0][2] = serpent[0][2] + (W+taille_bloc)
-    elif y <= 0-int(taille_bloc/2):
+    elif y <= 0:
         serpent[0][1] = serpent[0][1] + (W+taille_bloc) ; serpent[0][3] = serpent[0][3] + (W+taille_bloc)
         
 def suicide(x:int, y:int):
