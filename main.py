@@ -3,6 +3,8 @@
 ############################
 
 from tkinter import *
+from random import randrange
+from math import *
 
 # Variables
 
@@ -22,6 +24,8 @@ taille_serpent = 4      # Variable de la taille du serpent.
 taille_bloc= int(H/20)  # Variable de la taille d'un carré faisant partie du serpent en fonction de la résolution.
 stop = False            # Variable de si le jeu est arrêté.
 game_over = False       # Variable de si la partie est finie ou non.
+
+coord_pomme = [0, 0]
 
 # Liste des coordonnées des blocs du serpent au début d'une partie 
 #serpent_base = (
@@ -46,6 +50,12 @@ couleur = (
     '#FF0000',  # Rouge
 )
 
+couleur_pomme = (
+    'red',
+    'green',
+    'orange',
+    '#00F6FF'   # Cyan
+)
 # Fonctions
 
 # Fonctions pour faire changer la direction du serpent avec le clavier.
@@ -140,6 +150,7 @@ def deplacement():
         serpent[i] = origine[i-1]
     for i in range(0,taille_serpent):   
         game.create_rectangle(serpent[i], width=taille_bloc , outline=couleur[2], fill=couleur[2])
+    tete_qui_mange()
     effacement()
     bordure()
     if stop == False:                   # Arrête le serpent quand la partie est finie ou que le jeu est en pause.
@@ -151,7 +162,7 @@ def effacement():
     '''Fonction qui efface la queue du serpent.'''
     global nombre_iteration
     if nombre_iteration > 2:
-        game.create_rectangle(origine[taille_serpent-1], width=taille_bloc, outline=couleur[1], fill=couleur[1])    # Efface l'ancien dernier bloc du serpent.
+        game.create_rectangle(origine[taille_serpent-1][0], origine[taille_serpent-1][1], origine[taille_serpent-1][2]+2, origine[taille_serpent-1][3]+2, width=taille_bloc, outline=couleur[1], fill=couleur[1])    # Efface l'ancien dernier bloc du serpent.
     nombre_iteration += 1
     
 # Fonctions pour lancer une partie et la mettre en pause.
@@ -174,6 +185,7 @@ def nouvelle_partie_classique():
     global stop, serpent, etat, game_over, infinie, nombre_iteration
     game.delete(ALL)
     serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0
+    pomme()
     deplacement()
 
 def nouvelle_partie_infinie():
@@ -201,13 +213,45 @@ def lancer_infinie(event):
     '''Fonction qui lance une partie infinie lorsqu'une touche est actionner'''
     nouvelle_partie_infinie()
 
+# Fonctions pour le score et manger les pommes
+
+def position_aleatoire(x,y):
+    x = 0 ; y = 0
+    x = randrange(0,L)
+    y = randrange(0,H)
+    return x,y
+
+def pomme():
+    nb = 0
+    coord_pomme[1] = randrange(0, W, taille_bloc)
+    coord_pomme[0] = randrange(0, H, taille_bloc)
+    coul = couleur_pomme[randrange(0,len(couleur_pomme))]
+    game.create_rectangle(coord_pomme[0], coord_pomme[1], coord_pomme[0]+taille_bloc, coord_pomme[1]+taille_bloc, outline = 'grey', fill = coul)
+
+def manger():
+    score = 0
+    global taille_serpent
+    score = taille_serpent * 2
+    taille_serpent += 1
+    print(score)
+    tex.configure(text = 'score = ' + str(score))
+ 
+def tete_qui_mange():
+    print(serpent[0]) ; print(coord_pomme)
+    if int(serpent[0][0])-15 == coord_pomme[0] and int(serpent[0][1])-15 == coord_pomme[1]:
+         #print('Mange')
+        manger()
+        pomme()
+    #else:
+        #print('Ne mange pas')
+
 # Widgets
 
 win = Tk()
 win.title('Snake')
 
 game = Canvas(win, width=W, height=H, bg=couleur[1])
-game.grid(rowspan=14, column=1)
+game.grid(rowspan=14, column=0)
 
 # Assignation des touches directionnelles pour choisir la direction du serpent
 win.bind('<Up>', haut)
@@ -231,15 +275,18 @@ win.bind('<c>', lancer_classique)
 win.bind('<i>', lancer_infinie)
 
 but1 = Button(win, text='Nouvelle partie \n classique [c]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_classique)
-but1.grid(row=1, column=0)
+but1.grid(row=1, column=1)
 
 but2 = Button(win, text='Nouvelle partie \n infinie [i]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_infinie)
-but2.grid(row=2, column=0)
+but2.grid(row=2, column=1)
 
 but3 = Button(win, text='Fin de partie [f]', fg=couleur[0], bg=couleur[1], command=activer_game_over)
-but3.grid(row=3, column=0)
+but3.grid(row=3, column=1)
 
 but4 = Button(win, text='Quitter [q]', fg=couleur[0], bg=couleur[1], command=win.quit)
-but4.grid(row=13, column=0)
+but4.grid(row=13, column=1)
+
+tex = Label(win, text = 'score = 0', fg = 'grey', bg = 'white', font = "TkFont")
+tex.grid(column = 1, row = 4, sticky ='s')
 
 win.mainloop()
