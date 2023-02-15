@@ -112,11 +112,10 @@ def hors_limite_infinie(x:int, y:int):
     elif y <= 0:
         serpent[0][1] = serpent[0][1] + (W+taille_bloc) ; serpent[0][3] = serpent[0][3] + (W+taille_bloc)
         
-def suicide(x:int, y:int):
+def suicide():
     '''Fonction qui arrête la partie si le serpent se mord la queue.'''
-    print(x, y)
     for i in range(4, taille_serpent):
-        if serpent[i][0] == x  or serpent[i][1] == y :
+        if serpent[i][0] == serpent[0][0]  and serpent[i][1] == serpent[0][1] :
             activer_game_over()
 
 # Fonctions pour le mouvement du serpent.
@@ -137,11 +136,11 @@ def tete():
 def bordure():
     '''Fonction qui gère les actions du serpent en fonction de son environement et du mode de jeu.'''
     if infinie == False:                # Mode classique
-        hors_limite(serpent[0][0], serpent[0][1])
-        if taille_serpent < 4:          # Afin d'éviter que la partie s'arrête sans que le serpent ne se soit mordu le corps.
-            suicide(serpent[0][0], serpent[0][1])
+        hors_limite(int(serpent[0][0]), int(serpent[0][1]))
+        if taille_serpent > 4:          # Afin d'éviter que la partie s'arrête sans que le serpent ne se soit mordu le corps.
+            suicide()
     if infinie == True:                 # Mode infinie
-        hors_limite_infinie(serpent[0][0], serpent[0][1])
+        hors_limite_infinie(int(serpent[0][0]), int(serpent[0][1]))
 
 def deplacement():
     '''Fonction qui deplace le reste du corps du serpent.'''
@@ -150,8 +149,8 @@ def deplacement():
         serpent[i] = origine[i-1]
     for i in range(0,taille_serpent):   
         game.create_rectangle(serpent[i], width=taille_bloc , outline=couleur[2], fill=couleur[2])
-    tete_qui_mange()
     effacement()
+    tete_qui_mange()
     bordure()
     if stop == False:                   # Arrête le serpent quand la partie est finie ou que le jeu est en pause.
         game.after(100, deplacement)
@@ -182,17 +181,18 @@ def pause(event):
 
 def nouvelle_partie_classique():
     '''Fonction qui commence une nouvelle partie.'''
-    global stop, serpent, etat, game_over, infinie, nombre_iteration
+    global stop, serpent, etat, game_over, infinie, nombre_iteration, score, taille_serpent
     game.delete(ALL)
-    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0
+    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
     pomme()
     deplacement()
 
 def nouvelle_partie_infinie():
     '''Fonction qui commence une nouvelle partie.'''
-    global stop, serpent, etat, game_over, infinie, nombre_iteration
+    global stop, serpent, etat, game_over, infinie, nombre_iteration, score, taille_serpent
     game.delete(ALL)
-    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = True ; nombre_iteration = 0
+    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = True ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
+    pomme()
     deplacement()
 
 # Fonctions pour permettre l'utilisation du jeu sans la souris.
@@ -215,7 +215,7 @@ def lancer_infinie(event):
 
 # Fonctions pour le score et manger les pommes
 
-def position_aleatoire(x,y):
+def position_aleatoire(x:int, y:int)->tuple:
     x = 0 ; y = 0
     x = randrange(0,L)
     y = randrange(0,H)
@@ -223,27 +223,27 @@ def position_aleatoire(x,y):
 
 def pomme():
     nb = 0
-    coord_pomme[1] = randrange(0, W, taille_bloc)
-    coord_pomme[0] = randrange(0, H, taille_bloc)
+    coord_pomme[1] = randrange(0, W-taille_bloc, taille_bloc)
+    coord_pomme[0] = randrange(0, H-taille_bloc, taille_bloc)
     coul = couleur_pomme[randrange(0,len(couleur_pomme))]
-    game.create_rectangle(coord_pomme[0], coord_pomme[1], coord_pomme[0]+taille_bloc, coord_pomme[1]+taille_bloc, outline = 'grey', fill = coul)
+    game.create_rectangle(coord_pomme[0], coord_pomme[1], coord_pomme[0]+taille_bloc, coord_pomme[1]+taille_bloc, outline = 'white', fill = coul, width=3)
+
+def alonger_serpent():
+    indice_dernier = len(serpent)-1
+    print(indice_dernier)
+    serpent.append(origine[indice_dernier])
 
 def manger():
-    score = 0
-    global taille_serpent
-    score = taille_serpent * 2
+    global score, taille_serpent
+    alonger_serpent()
     taille_serpent += 1
-    print(score)
+    score += 1
     tex.configure(text = 'score = ' + str(score))
  
 def tete_qui_mange():
-    print(serpent[0]) ; print(coord_pomme)
     if int(serpent[0][0])-15 == coord_pomme[0] and int(serpent[0][1])-15 == coord_pomme[1]:
-         #print('Mange')
         manger()
         pomme()
-    #else:
-        #print('Ne mange pas')
 
 # Widgets
 
