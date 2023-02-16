@@ -160,7 +160,8 @@ def nouvelle_partie():
     '''Fonction qui commence une nouvelle partie.'''
     global stop, serpent, etat, game_over, infinie, nombre_iteration, score, taille_serpent
     game.delete(ALL)
-    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
+    serpent = list(serpent_base) # Initialisation des coordonnées du serpent.
+    stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
     pomme()
     deplacement()
 
