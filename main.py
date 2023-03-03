@@ -27,14 +27,6 @@ game_over = False       # Variable de si la partie est finie ou non.
 
 coord_pomme = [0, 0]
 
-# Liste des coordonnées des blocs du serpent au début d'une partie 
-#serpent_base = (
-#    (W/2+(taille_bloc*0), W/2, H/2+(taille_bloc*0), H/2),
-#    (W/2+(taille_bloc*1), W/2, H/2+(taille_bloc*1), H/2),
-#    (W/2+(taille_bloc*2), W/2, H/2+(taille_bloc*2), H/2),
-#    (W/2+(taille_bloc*3), W/2, H/2+(taille_bloc*3), H/2)
-#)
-
 serpent_base = (
     (W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2)),
     (W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2),W/2-int(taille_bloc/2)),
@@ -53,8 +45,7 @@ couleur = (
 couleur_pomme = (
     'red',
     'green',
-    'orange',
-    '#00F6FF'   # Cyan
+    'orange'
 )
 # Fonctions
 
@@ -100,17 +91,6 @@ def hors_limite(x:int, y:int):
     '''Fonction qui arrête la partie si le serpent sort de la carte dans une partie classique.'''
     if x >= W or y >= H or x <= 0 or y <= 0:
         activer_game_over()
-    
-def hors_limite_infinie(x:int, y:int):
-    '''Fonction qui arrête la partie si le serpent sort de la carte dans une partie infinie.'''
-    if x >= W:
-        serpent[0][0] = serpent[0][0] - (W+taille_bloc) ; serpent[0][2] = serpent[0][2] - (W+taille_bloc)
-    elif y >= H:
-        serpent[0][1] = serpent[0][1] - (W+taille_bloc) ; serpent[0][3] = serpent[0][3] - (W+taille_bloc)
-    elif x <= 0:
-        serpent[0][0] = serpent[0][0] + (W+taille_bloc) ; serpent[0][2] = serpent[0][2] + (W+taille_bloc)
-    elif y <= 0:
-        serpent[0][1] = serpent[0][1] + (W+taille_bloc) ; serpent[0][3] = serpent[0][3] + (W+taille_bloc)
         
 def suicide():
     '''Fonction qui arrête la partie si le serpent se mord la queue.'''
@@ -135,12 +115,9 @@ def tete():
 
 def bordure():
     '''Fonction qui gère les actions du serpent en fonction de son environement et du mode de jeu.'''
-    if infinie == False:                # Mode classique
-        hors_limite(int(serpent[0][0]), int(serpent[0][1]))
-        if taille_serpent > 4:          # Afin d'éviter que la partie s'arrête sans que le serpent ne se soit mordu le corps.
-            suicide()
-    if infinie == True:                 # Mode infinie
-        hors_limite_infinie(int(serpent[0][0]), int(serpent[0][1]))
+    hors_limite(int(serpent[0][0]), int(serpent[0][1]))
+    if taille_serpent > 4:          # Afin d'éviter que la partie s'arrête sans que le serpent ne se soit mordu le corps.
+        suicide()
 
 def deplacement():
     '''Fonction qui deplace le reste du corps du serpent.'''
@@ -179,19 +156,12 @@ def pause(event):
         game.delete(ecran_pause)
         deplacement()
 
-def nouvelle_partie_classique():
+def nouvelle_partie():
     '''Fonction qui commence une nouvelle partie.'''
     global stop, serpent, etat, game_over, infinie, nombre_iteration, score, taille_serpent
     game.delete(ALL)
-    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
-    pomme()
-    deplacement()
-
-def nouvelle_partie_infinie():
-    '''Fonction qui commence une nouvelle partie.'''
-    global stop, serpent, etat, game_over, infinie, nombre_iteration, score, taille_serpent
-    game.delete(ALL)
-    serpent = list(serpent_base) ; stop = False ; etat = 6 ; game_over = False ; infinie = True ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
+    serpent = list(serpent_base) # Initialisation des coordonnées du serpent.
+    stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
     pomme()
     deplacement()
 
@@ -205,13 +175,9 @@ def quitter(event):
     '''Fonction pour quitter le jeu lorsqu'une touche est actionner.'''
     win.quit()
 
-def lancer_classique(event):
+def lancer(event):
     '''Fonction qui lance une partie classique lorsqu'une touche est actionner.'''
-    nouvelle_partie_classique()
-    
-def lancer_infinie(event):
-    '''Fonction qui lance une partie infinie lorsqu'une touche est actionner'''
-    nouvelle_partie_infinie()
+    nouvelle_partie()
 
 # Fonctions pour le score et manger les pommes
 
@@ -230,7 +196,6 @@ def pomme():
 
 def alonger_serpent():
     indice_dernier = len(serpent)-1
-    print(indice_dernier)
     serpent.append(origine[indice_dernier])
 
 def manger():
@@ -269,22 +234,16 @@ win.bind('<f>', fin_partie)
 win.bind('<q>', quitter)
 
 # Assignation de la touche 'c' pour lancer une partie classique.
-win.bind('<c>', lancer_classique)
+win.bind('<c>', lancer)
 
-# Assignation de la touche'i' pour lancer une partie infinie.
-win.bind('<i>', lancer_infinie)
-
-but1 = Button(win, text='Nouvelle partie \n classique [c]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_classique)
+but1 = Button(win, text='Nouvelle partie \n classique [c]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie)
 but1.grid(row=1, column=1)
 
-but2 = Button(win, text='Nouvelle partie \n infinie [i]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_infinie)
-but2.grid(row=2, column=1)
+but2 = Button(win, text='Fin de partie [f]', fg=couleur[0], bg=couleur[1], command=activer_game_over)
+but2.grid(row=3, column=1)
 
-but3 = Button(win, text='Fin de partie [f]', fg=couleur[0], bg=couleur[1], command=activer_game_over)
-but3.grid(row=3, column=1)
-
-but4 = Button(win, text='Quitter [q]', fg=couleur[0], bg=couleur[1], command=win.quit)
-but4.grid(row=13, column=1)
+but3 = Button(win, text='Quitter [q]', fg=couleur[0], bg=couleur[1], command=win.quit)
+but3.grid(row=13, column=1)
 
 tex = Label(win, text = 'score = 0', fg = 'grey', bg = 'white', font = "TkFont")
 tex.grid(column = 1, row = 4, sticky ='s')
