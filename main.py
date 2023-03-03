@@ -12,6 +12,8 @@ from math import *
 W = 600
 H = 600
 
+assert W == 600 and H == 600
+
 global taille_serpent
 global etat
 global taille_bloc
@@ -43,9 +45,9 @@ couleur = (
 )
 
 couleur_pomme = (
-    'red',
-    'green',
-    'orange'
+    '#FF0000',  # Rouge
+    '#8db600',  # Vert
+    '#FFA500',  # Orange
 )
 # Fonctions
 
@@ -164,6 +166,7 @@ def nouvelle_partie():
     stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
     pomme()
     deplacement()
+    tex.configure(text = 'Score = ' + str(score))
 
 # Fonctions pour permettre l'utilisation du jeu sans la souris.
 
@@ -191,8 +194,12 @@ def pomme():
     nb = 0
     coord_pomme[1] = randrange(0, W-taille_bloc, taille_bloc)
     coord_pomme[0] = randrange(0, H-taille_bloc, taille_bloc)
+    for i in range(0, taille_serpent):          # Pour éviter que la pomme soit positionné dans le serpent.
+        if serpent[i][0] == coord_pomme[0]  and serpent[i][1] == coord_pomme[1]:
+            coord_pomme[1] = randrange(0, W-taille_bloc, taille_bloc)
+    coord_pomme[0] = randrange(0, H-taille_bloc, taille_bloc)
     coul = couleur_pomme[randrange(0,len(couleur_pomme))]
-    game.create_rectangle(coord_pomme[0], coord_pomme[1], coord_pomme[0]+taille_bloc, coord_pomme[1]+taille_bloc, outline = 'white', fill = coul, width=3)
+    game.create_rectangle(coord_pomme[0], coord_pomme[1], coord_pomme[0]+taille_bloc, coord_pomme[1]+taille_bloc, outline = 'white', fill = coul, width=5)
 
 def alonger_serpent():
     indice_dernier = len(serpent)-1
@@ -203,7 +210,7 @@ def manger():
     alonger_serpent()
     taille_serpent += 1
     score += 1
-    tex.configure(text = 'score = ' + str(score))
+    tex.configure(text = 'Score = ' + str(score))
  
 def tete_qui_mange():
     if int(serpent[0][0])-15 == coord_pomme[0] and int(serpent[0][1])-15 == coord_pomme[1]:
@@ -216,7 +223,7 @@ win = Tk()
 win.title('Snake')
 
 game = Canvas(win, width=W, height=H, bg=couleur[1])
-game.grid(rowspan=14, column=0)
+game.grid(rowspan=14, column=1)
 
 # Assignation des touches directionnelles pour choisir la direction du serpent
 win.bind('<Up>', haut)
@@ -234,18 +241,18 @@ win.bind('<f>', fin_partie)
 win.bind('<q>', quitter)
 
 # Assignation de la touche 'c' pour lancer une partie classique.
-win.bind('<c>', lancer)
+win.bind('<n>', lancer)
 
-but1 = Button(win, text='Nouvelle partie \n classique [c]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie)
-but1.grid(row=1, column=1)
+but1 = Button(win, text='Nouvelle partie [n]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie)
+but1.grid(row=1, column=0)
 
 but2 = Button(win, text='Fin de partie [f]', fg=couleur[0], bg=couleur[1], command=activer_game_over)
-but2.grid(row=3, column=1)
+but2.grid(row=3, column=0)
 
 but3 = Button(win, text='Quitter [q]', fg=couleur[0], bg=couleur[1], command=win.quit)
-but3.grid(row=13, column=1)
+but3.grid(row=13, column=0)
 
 tex = Label(win, text = 'score = 0', fg = 'grey', bg = 'white', font = "TkFont")
-tex.grid(column = 1, row = 4, sticky ='s')
+tex.grid(column = 0, row = 4, sticky ='s')
 
 win.mainloop()
