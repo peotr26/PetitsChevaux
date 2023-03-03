@@ -51,11 +51,11 @@ Nous utilisons la librairie Tkinter pour l'interface graphique ainsi que le jeu.
 
 ## Captures d'écran 
 
-Interface principale
+Interface principale  
 ![Image](Screenshots/Main_Window.png)
 
-Écran de fin de partie
+Écran de fin de partie  
 ![Image](Screenshots/Game_Over.png)
 
-Écran de pause
+Écran de pause  
 ![Image](Screenshots/Pause.png)
