@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>-</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="cahier-des-charges-du-jeu-snake">Cahier des charges du jeu Snake</h1>
+<h2 id="membres-du-projet">Membres du projet</h2>
+<ul>
+<li>Maxime Lefèvre<br />
+</li>
+<li>Pierre Fernagu–Berthier</li>
+</ul>
+<h2 id="but-du-jeu">But du jeu</h2>
+<p>Manger le plus de pommes possibles dans un espace restreint.</p>
+<h2 id="règles-du-jeu">Règles du jeu</h2>
+<ul>
+<li>La partie est finie lorsque le serpent sort de la carte ou qu’il se mord la queue.<br />
+</li>
+<li>Dès qu’une pomme est avalée, la queue du serpent s’agrandit.<br />
+</li>
+<li>Une pomme vaut un point.<br />
+</li>
+<li>La vitesse du serpent est constante durant toute la partie.</li>
+</ul>
+<h2 id="étapes-de-la-création-du-jeu">Étapes de la création du jeu</h2>
+<ol>
+<li>Faire le système du mouvement du serpent (Pierre), et du placement des pommes + système du score (Maxime).<br />
+</li>
+<li>Mettre ensemble les deux parties du code.<br />
+</li>
+<li>Corriger les derniers bugs.</li>
+</ol>
+<h2 id="caractéristiques">Caractéristiques</h2>
+<h3 id="serpent">Serpent</h3>
+<p>Le serpent est divisé en bloc de forme carré. La longueur d’un côté du carré est égale à la hauteur de la carte divisée par 20. Le serpent commence avec 4 blocs puis dès qu’il mange une pomme, le serpent grandit d’un bloc.<br />
+La couleur du serpent est un vert qui correspond au code hexadécimal suivant : #6CBB3C.</p>
+<h3 id="pomme">Pomme</h3>
+<p>Une pomme fait la taille d’un bloc dont les côtés font la même taille que les côtés composant les blocs du serpent. Les pommes sont placées de façon aléatoire sur la carte.<br />
+Les couleurs des pommes sont aussi aléatoires, choisis dans un ensemble de couleurs prédéfinies. Les codes hexadécimaux des couleurs sont les suivants : #FF0000 pour le rouge, #8db600 pour le vert et #FFA500 pour l’orange.</p>
+<h3 id="carte">Carte</h3>
+<p>La carte est égale à la taille du canevas sur laquelle elle est dessinée. La carte est blanche. La carte est de forme carrée.</p>
+<h3 id="interface">Interface</h3>
+<p>Les boutons ainsi que le score sont situés à droite du canevas. En haut, se trouve le score de la partie en cours. Puis, en dessous se trouve le bouton pour commencer la partie. En bas, se trouve le bouton pour quitter le jeu.<br />
+Le nom de la fenêtre est <em>Snake</em>.<br />
+Nous utilisons la librairie Tkinter pour l’interface graphique ainsi que le jeu.</p>
+<h2 id="bugs-connus">Bugs connus</h2>
+<ul>
+<li>Sur des ordinateurs peu puissants, le jeu peut commencer à ralentir et devenir injouable. Ceci est une limitation du choix de langage de programmation et de la librairie pour l’interface.<br />
+</li>
+<li>Le jeu ne fonctionne pas si la résolution du jeu est changé de la valeur de base, 600 pixels par 600 pixels.<br />
+</li>
+<li>La pomme peut très rarement venir se positionner dans le serpent, effacent la pomme et, mais ne comptabilisant pas le point. Afin de marquer le point, il faut avaler la pomme invisible. Néanmoins, ceci est très rare.</li>
+</ul>
+<h2 id="captures-décran">Captures d’écran</h2>
+<p>Interface principale<br />
+<img src="Screenshots/Main_Window.png" alt="Image" /></p>
+<p>Écran de fin de partie<br />
+<img src="Screenshots/Game_Over.png" alt="Image" /></p>
+<p>Écran de pause<br />
+<img src="Screenshots/Pause.png" alt="Image" /></p>
+</body>
+</html>
