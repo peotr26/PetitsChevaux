@@ -11,7 +11,7 @@ This is a school project. We are not going to have time to maintain it. It is al
 
 All the documentation in the code as well as the functions and variables are in French. We don't really have the time to translate it.
 
-## Nécéssaire/Requirements
+## Nécessaires/Requirements
 
 - Python 3.x
 - Impact (police/Font)
