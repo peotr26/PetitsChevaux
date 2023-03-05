@@ -171,9 +171,9 @@
 <ol>
 <li>Faire le système du mouvement du serpent (Pierre), et du placement des pommes + système du score (Maxime).<br />
 </li>
-<li>Mettre ensemble les deux parties du code.<br />
+<li>Mettre ensemble les deux parties du code. (Maxime + Pierre)<br />
 </li>
-<li>Corriger les derniers bugs.</li>
+<li>Corriger le plus de bugs possible. (Maxime + Pierre)</li>
 </ol>
 <h2 id="caractéristiques">Caractéristiques</h2>
 <h3 id="serpent">Serpent</h3>
@@ -183,18 +183,18 @@ La couleur du serpent est un vert qui correspond au code hexadécimal suivant : 
 <p>Une pomme fait la taille d’un bloc dont les côtés font la même taille que les côtés composant les blocs du serpent. Les pommes sont placées de façon aléatoire sur la carte.<br />
 Les couleurs des pommes sont aussi aléatoires, choisis dans un ensemble de couleurs prédéfinies. Les codes hexadécimaux des couleurs sont les suivants : #FF0000 pour le rouge, #8db600 pour le vert et #FFA500 pour l’orange.</p>
 <h3 id="carte">Carte</h3>
-<p>La carte est égale à la taille du canevas sur laquelle elle est dessinée. La carte est blanche. La carte est de forme carrée.</p>
+<p>La carte est égale à la taille du canevas sur laquelle elle est dessinée. La carte est blanche et de forme carrée.</p>
 <h3 id="interface">Interface</h3>
-<p>Les boutons ainsi que le score sont situés à droite du canevas. En haut, se trouve le score de la partie en cours. Puis, en dessous se trouve le bouton pour commencer la partie. En bas, se trouve le bouton pour quitter le jeu.<br />
+<p>Les boutons ainsi que le score sont situés à droite du canevas. En haut, se trouve les boutons pour commencer la partie et la l’arrêter. Puis en dessous, se trouve le score de la partie en cours. En bas, se trouve le bouton pour quitter le jeu. Le jeu peut être mis en pause en appuyant sur le bouton <em>P</em>.<br />
 Le nom de la fenêtre est <em>Snake</em>.<br />
 Nous utilisons la librairie Tkinter pour l’interface graphique ainsi que le jeu.</p>
 <h2 id="bugs-connus">Bugs connus</h2>
 <ul>
-<li>Sur des ordinateurs peu puissants, le jeu peut commencer à ralentir et devenir injouable. Ceci est une limitation du choix de langage de programmation et de la librairie pour l’interface.<br />
+<li>Sur des ordinateurs peu puissants, le jeu peut commencer à ralentir et devenir injouable en fonction de la taille du serpent. Ceci est une limitation du choix de langage de programmation et de la librairie pour l’interface.<br />
 </li>
-<li>Le jeu ne fonctionne pas si la résolution du jeu est changé de la valeur de base, 600 pixels par 600 pixels.<br />
+<li>Le système de score ne fonctionne pas si la résolution du jeu est changé de la valeur de base, 600 pixels par 600 pixels.<br />
 </li>
-<li>La pomme peut très rarement venir se positionner dans le serpent, effacent la pomme et, mais ne comptabilisant pas le point. Afin de marquer le point, il faut avaler la pomme invisible. Néanmoins, ceci est très rare.</li>
+<li>La pomme peut très rarement venir se positionner dans le serpent, effacent la pomme et, mais ne comptabilisant pas le point. Afin de marquer le point, il faut avaler la pomme invisible. Néanmoins, ceci est très rare. Le code contient un patch afin de réduire la probabilité de cet événement.</li>
 </ul>
 <h2 id="captures-décran">Captures d’écran</h2>
 <p>Interface principale<br />
