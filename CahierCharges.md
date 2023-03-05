@@ -48,12 +48,12 @@ Nous utilisons la librairie Tkinter pour l'interface graphique ainsi que le jeu.
 
 ### Le mode infinie
 
-Nous avons essayé de développer un mode infinie dans lequel la partie dure indéfiniment. Néanmoins ce mode contenait un grand nombre de bugs graphiques qui auraient nécessité de tout réécrire de zéro. De plus, ce mode se met à ralentir lorsque le serpent passe trop de fois d'un côté à l'autre. Nous avons donc décidés de le retirer.
+Nous avons essayé de développer un mode infini dans lequel la partie dure indéfiniment. Néanmoins, ce mode contenait un grand nombre de bugs graphiques qui auraient nécessité de tout réécrire de zéro. De plus, ce mode se met à ralentir lorsque le serpent passe trop de fois d'un côté à l'autre. Nous avons donc décidé de le retirer.  
 
 ### Le choix du côté des boutons et du fonctionnement de la variable pour le sens de la direction du serpent
 
-Il nous a fallu longtemps afin de se décider sur le choix du côtés des boutons dans l'interface. Pierre voulait à gauche parce que c'est plus ergonomique, et Maxime voulait à droite mais sans véritable raison. Nous avons finalement choisis à droite.  
-Idem, pour le fonctionnement de la variable pour le sens de la direction du serpent. Pierre voulait utiliser des entiers car c'est beaucoup plus simple à programmer, et Maxime voulait utiliser des chaînes de caractères contenant le nom du sens. Nous avons finalement choisis l'option de Maxime car plus simple à comprendre.
+Il nous a fallu longtemps afin de se décider sur le choix du côté des boutons dans l'interface.Pierre voulait à gauche parce que c'est plus ergonomique, et Maxime voulait à droite mais sans véritable raison. Nous avons finalement choisi à droite.  
+Idem, pour le fonctionnement de la variable pour le sens de la direction du serpent. Pierre voulait utiliser des entiers, car c'est beaucoup plus simple à programmer, et Maxime voulait utiliser des chaînes de caractères contenant le nom du sens. Nous avons finalement choisi l'option de Maxime parce que plus simple à comprendre.  
 
 ## Bugs connus
 
