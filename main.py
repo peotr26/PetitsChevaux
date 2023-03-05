@@ -20,8 +20,8 @@ global taille_bloc
 global stop
 global game_over
 
-etat = 6                # Variable de la direction du serpent
-# 4 = gauche, 6 = droite, 8 = haut, 2 = bas
+
+etat = "droite"         # Variable de la direction du serpent
 taille_serpent = 4      # Variable de la taille du serpent.
 taille_bloc= int(H/20)  # Variable de la taille d'un carré faisant partie du serpent en fonction de la résolution.
 stop = False            # Variable de si le jeu est arrêté.
@@ -40,7 +40,7 @@ serpent_base = (
 couleur = (
     '#000000',  # Noir
     '#FFFFFF',  # Blanc
-    '#6CBB3C',  # Vert
+    '#6CBB3C',  # Vert du serpent
     '#FF0000',  # Rouge
 )
 
@@ -56,32 +56,32 @@ couleur_pomme = (
 def haut(event):
     '''Fonction qui change la direction du serpent vers le haut.'''
     global etat
-    if etat == 4 or etat == 6:      # S'assure que le serpent ne puisse faire demi-tour.
-        etat = 8
+    if etat == "gauche" or etat == "droite":      # S'assure que le serpent ne puisse pas faire demi-tour.
+        etat = "haut"
 
 def bas(event):
     '''Fonction qui change la direction du serpent vers le bas.'''
     global etat
-    if etat == 4 or etat == 6:      # Idem
-        etat = 2
+    if etat == "gauche" or etat == "droite":      # Idem
+        etat = "bas"
 
 def droite(event):
     '''Fonction qui change la direction du serpent vers la droite.'''
     global etat
-    if etat == 8 or etat == 2:      # Idem
-        etat = 6
+    if etat == "haut" or etat == "bas":      # Idem
+        etat = "droite"
 
 def gauche(event):
     '''Fonction qui change la direction du serpent vers la gauche.'''
     global etat
-    if etat == 8 or etat == 2:      # Idem
-        etat = 4
+    if etat == "haut" or etat == "bas":      # Idem
+        etat = "gauche"
 
 # Fonctions pour la fin de partie et la gestion des bords de la cartes.
 
 def activer_game_over():
     '''Fonction qui active la fin de partie.'''
-    global stop, game_over
+    global stop, game_over, score
     stop = True ; game_over = True      # Arrête le serpent et marque la partie comme finie.
     
 def ecran_game_over():
@@ -106,13 +106,13 @@ def tete():
     '''Fonction qui change la position de la tête en fonction de la direction.'''
     global origine
     origine = list(serpent)
-    if etat == 6:
+    if etat == "droite":
         serpent[0] = [serpent[0][0]+taille_bloc, serpent[0][1], serpent[0][2]+taille_bloc, serpent[0][3]]
-    if etat == 4:
+    elif etat == "gauche":
         serpent[0] = [serpent[0][0]-taille_bloc, serpent[0][1], serpent[0][2]-taille_bloc, serpent[0][3]]
-    if etat == 8:
+    elif etat == "haut":
         serpent[0] = [serpent[0][0], serpent[0][1]-taille_bloc, serpent[0][2], serpent[0][3]-taille_bloc]
-    if etat == 2:
+    elif etat == "bas":
         serpent[0] = [serpent[0][0], serpent[0][1]+taille_bloc, serpent[0][2], serpent[0][3]+taille_bloc]
 
 def bordure():
@@ -133,7 +133,7 @@ def deplacement():
     bordure()
     if stop == False:                   # Arrête le serpent quand la partie est finie ou que le jeu est en pause.
         game.after(100, deplacement)
-    if game_over == True:
+    elif game_over == True:
         ecran_game_over()
 
 def effacement():
@@ -150,20 +150,20 @@ def pause(event):
     global stop, ecran_pause
     if game_over == True:
         return
-    elif stop == False:     # Si le jeu n'est pas déja en arrêter.
+    elif stop == False:     # Vérifie si le jeu n'est pas déjà arrêté.
         stop = True
         ecran_pause = game.create_text(W/2, H/2, text='Pause', font=('Impact', 30))
-    elif stop == True:      #  Relance le jeu si il est arrêter.
+    elif stop == True:      #  Relance le jeu si il est arrêté.
         stop = False
         game.delete(ecran_pause)
         deplacement()
 
-def nouvelle_partie():
+def nouvelle_partie_classique():
     '''Fonction qui commence une nouvelle partie.'''
     global stop, serpent, etat, game_over, infinie, nombre_iteration, score, taille_serpent
     game.delete(ALL)
-    serpent = list(serpent_base) # Initialisation des coordonnées du serpent.
-    stop = False ; etat = 6 ; game_over = False ; infinie = False ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
+    serpent = list(serpent_base)    # Initialisation des coordonnées du serpent.
+    stop = False ; etat = "droite" ; game_over = False ; infinie = False ; nombre_iteration = 0 ; score = 0 ; taille_serpent = 4
     pomme()
     deplacement()
     tex.configure(text = 'Score = ' + str(score))
@@ -178,19 +178,22 @@ def quitter(event):
     '''Fonction pour quitter le jeu lorsqu'une touche est actionner.'''
     win.quit()
 
-def lancer(event):
+def lancer_classique(event):
     '''Fonction qui lance une partie classique lorsqu'une touche est actionner.'''
-    nouvelle_partie()
+    nouvelle_partie_classique()
 
 # Fonctions pour le score et manger les pommes
 
 def position_aleatoire(x:int, y:int)->tuple:
+    '''Fonction qui génère des positions aléatoires aux points x et y, qui ne peuvent pas être en dehors du canvas.'''
     x = 0 ; y = 0
-    x = randrange(0,L)
-    y = randrange(0,H)
+    x = randrange(0, L)
+    y = randrange(0, H)
     return x,y
 
 def pomme():
+    '''Fonction qui dessine une pomme avec une position aleatoire qui ne peut pas être en dehors du canvas.
+    La Couleur de la pomme est determinée par une liste de couleur : "couleur".'''
     nb = 0
     coord_pomme[1] = randrange(0, W-taille_bloc, taille_bloc)
     coord_pomme[0] = randrange(0, H-taille_bloc, taille_bloc)
@@ -202,17 +205,20 @@ def pomme():
     game.create_rectangle(coord_pomme[0], coord_pomme[1], coord_pomme[0]+taille_bloc, coord_pomme[1]+taille_bloc, outline = 'white', fill = coul, width=5)
 
 def alonger_serpent():
+    '''Fonction qui rajoute un bloc à la fin du serpent quand il mange une pomme.'''
     indice_dernier = len(serpent)-1
     serpent.append(origine[indice_dernier])
 
 def manger():
+    '''Fonction qui augmmente le score de 1 point lorsqu'une pomme est mangée'.'''
     global score, taille_serpent
     alonger_serpent()
     taille_serpent += 1
     score += 1
-    tex.configure(text = 'Score = ' + str(score))
+    tex.configure(text = 'Score = ' + str(score))   # Rafraichis le label pour le score.
  
 def tete_qui_mange():
+    '''Fonction qui permet d'augmenter le score et redessiner une nouvelle pomme orsque le serpent mange une pomme.'''
     if int(serpent[0][0])-15 == coord_pomme[0] and int(serpent[0][1])-15 == coord_pomme[1]:
         manger()
         pomme()
@@ -223,7 +229,7 @@ win = Tk()
 win.title('Snake')
 
 game = Canvas(win, width=W, height=H, bg=couleur[1])
-game.grid(rowspan=14, column=1)
+game.grid(rowspan=14, column=0)
 
 # Assignation des touches directionnelles pour choisir la direction du serpent
 win.bind('<Up>', haut)
@@ -241,18 +247,18 @@ win.bind('<f>', fin_partie)
 win.bind('<q>', quitter)
 
 # Assignation de la touche 'c' pour lancer une partie classique.
-win.bind('<n>', lancer)
+win.bind('<n>', lancer_classique)
 
-but1 = Button(win, text='Nouvelle partie [n]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie)
-but1.grid(row=1, column=0)
+but1 = Button(win, text='Nouvelle partie [n]', fg=couleur[0], bg=couleur[1], command=nouvelle_partie_classique)
+but1.grid(row=1, column=1)
 
 but2 = Button(win, text='Fin de partie [f]', fg=couleur[0], bg=couleur[1], command=activer_game_over)
-but2.grid(row=3, column=0)
+but2.grid(row=3, column=1)
 
 but3 = Button(win, text='Quitter [q]', fg=couleur[0], bg=couleur[1], command=win.quit)
-but3.grid(row=13, column=0)
+but3.grid(row=13, column=1)
 
 tex = Label(win, text = 'score = 0', fg = 'grey', bg = 'white', font = "TkFont")
-tex.grid(column = 0, row = 4, sticky ='s')
+tex.grid(column = 1, row = 4, sticky ='s')
 
 win.mainloop()

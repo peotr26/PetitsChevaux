@@ -188,6 +188,12 @@ Les couleurs des pommes sont aussi aléatoires, choisis dans un ensemble de coul
 <p>Les boutons ainsi que le score sont situés à droite du canevas. En haut, se trouve les boutons pour commencer la partie et la l’arrêter. Puis en dessous, se trouve le score de la partie en cours. En bas, se trouve le bouton pour quitter le jeu. Le jeu peut être mis en pause en appuyant sur le bouton <em>P</em>.<br />
 Le nom de la fenêtre est <em>Snake</em>.<br />
 Nous utilisons la librairie Tkinter pour l’interface graphique ainsi que le jeu.</p>
+<h2 id="problèmes-rencontrés">Problèmes rencontrés</h2>
+<h3 id="le-mode-infinie">Le mode infinie</h3>
+<p>Nous avons essayé de développer un mode infinie dans lequel la partie dure indéfiniment. Néanmoins ce mode contenait un grand nombre de bugs graphiques qui auraient nécessité de tout réécrire de zéro. De plus, ce mode se met à ralentir lorsque le serpent passe trop de fois d’un côté à l’autre. Nous avons donc décidés de le retirer.</p>
+<h3 id="le-choix-du-côté-des-boutons-et-du-fonctionnement-de-la-variable-pour-le-sens-de-la-direction-du-serpent">Le choix du côté des boutons et du fonctionnement de la variable pour le sens de la direction du serpent</h3>
+<p>Il nous a fallu longtemps afin de se décider sur le choix du côtés des boutons dans l’interface. Pierre voulait à gauche parce que c’est plus ergonomique, et Maxime voulait à droite mais sans véritable raison. Nous avons finalement choisis à droite.<br />
+Idem, pour le fonctionnement de la variable pour le sens de la direction du serpent. Pierre voulait utiliser des entiers car c’est beaucoup plus simple à programmer, et Maxime voulait utiliser des chaînes de caractères contenant le nom du sens. Nous avons finalement choisis l’option de Maxime car plus simple à comprendre.</p>
 <h2 id="bugs-connus">Bugs connus</h2>
 <ul>
 <li>Sur des ordinateurs peu puissants, le jeu peut commencer à ralentir et devenir injouable en fonction de la taille du serpent. Ceci est une limitation du choix de langage de programmation et de la librairie pour l’interface.<br />

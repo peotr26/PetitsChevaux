@@ -44,11 +44,22 @@ Les boutons ainsi que le score sont situés à droite du canevas. En haut, se tr
 Le nom de la fenêtre est *Snake*.  
 Nous utilisons la librairie Tkinter pour l'interface graphique ainsi que le jeu.  
 
+## Problèmes rencontrés
+
+### Le mode infinie
+
+Nous avons essayé de développer un mode infinie dans lequel la partie dure indéfiniment. Néanmoins ce mode contenait un grand nombre de bugs graphiques qui auraient nécessité de tout réécrire de zéro. De plus, ce mode se met à ralentir lorsque le serpent passe trop de fois d'un côté à l'autre. Nous avons donc décidés de le retirer.
+
+### Le choix du côté des boutons et du fonctionnement de la variable pour le sens de la direction du serpent
+
+Il nous a fallu longtemps afin de se décider sur le choix du côtés des boutons dans l'interface. Pierre voulait à gauche parce que c'est plus ergonomique, et Maxime voulait à droite mais sans véritable raison. Nous avons finalement choisis à droite.  
+Idem, pour le fonctionnement de la variable pour le sens de la direction du serpent. Pierre voulait utiliser des entiers car c'est beaucoup plus simple à programmer, et Maxime voulait utiliser des chaînes de caractères contenant le nom du sens. Nous avons finalement choisis l'option de Maxime car plus simple à comprendre.
+
 ## Bugs connus
 
 - Sur des ordinateurs peu puissants, le jeu peut commencer à ralentir et devenir injouable en fonction de la taille du serpent. Ceci est une limitation du choix de langage de programmation et de la librairie pour l'interface.  
 - Le système de score ne fonctionne pas si la résolution du jeu est changé de la valeur de base, 600 pixels par 600 pixels.  
-- La pomme peut très rarement venir se positionner dans le serpent, effacent la pomme et, mais ne comptabilisant pas le point. Afin de marquer le point, il faut avaler la pomme invisible. Néanmoins, ceci est très rare. Le code contient un patch afin de réduire la probabilité de cet événement.   
+- La pomme peut très rarement venir se positionner dans le serpent, effacent la pomme et, mais ne comptabilisant pas le point. Afin de marquer le point, il faut avaler la pomme invisible. Néanmoins, ceci est très rare. Le code contient un patch afin de réduire la probabilité de cet événement.  
 
 ## Captures d'écran 
 
