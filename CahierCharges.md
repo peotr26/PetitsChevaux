@@ -44,6 +44,10 @@ Les boutons ainsi que le score sont situés à droite du canevas. En haut, se tr
 Le nom de la fenêtre est *Snake*.  
 Nous utilisons la librairie Tkinter pour l'interface graphique ainsi que le jeu.  
 
+## Choix du jeu
+
+Au tout début, nous voulions faire le jeu des petits chevaux. Mais nous avons vite réalisé que cela aller être très compliqué à programmer surtout avec Tkinter. Nous avons donc changé pour faire Snake. Les différentes tâches nécessaires pour la réalisation de Snake sont aussi plus simples à répartir sur plusieurs personnes et à être développé indépendamment que pour les petits chevaux.
+
 ## Problèmes rencontrés
 
 ### Le mode infinie
